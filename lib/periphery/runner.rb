@@ -13,8 +13,10 @@ module Periphery
     def scan(options)
       arguments = [binary_path, 'scan'] + scan_arguments(options)
       stdout, stderr, status = Open3.capture3(*arguments)
-      raise "error: #{arguments} exited with status code #{status.exitstatus}. #{stderr} #{stdout}" unless status.success?
-
+      unless status.success
+        stdout
+        raise "error: #{arguments} exited with status code #{status.exitstatus}. #{stderr}"
+      end
       stdout
     end
 
